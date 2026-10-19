@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Tulan_David_Lab2.Models;
 
 namespace Tulan_David_Lab2.Pages.BookPages;
 
-public class CreateModel : PageModel
+public class CreateModel : BookCategoriesPageModel
 {
     private readonly Tulan_David_Lab2Context _context;
 
@@ -17,11 +15,11 @@ public class CreateModel : PageModel
 
     public IActionResult OnGet()
     {
-        ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
+        LoadDropdowns();
 
-        ViewData["AuthorID"] = new SelectList(
-            _context.Author.Select(a => new { a.ID, FullName = a.FirstName + " " + a.LastName }),
-            "ID", "FullName");
+        var book = new Book();
+        book.BookCategories = new List<BookCategory>();
+        PopulateAssignedCategoryData(_context, book);
 
         return Page();
     }
@@ -29,17 +27,45 @@ public class CreateModel : PageModel
     [BindProperty]
     public Book Book { get; set; } = default!;
 
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD.
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(string[] selectedCategories)
     {
+        var newBook = new Book();
+        newBook.BookCategories = new List<BookCategory>();
+
+        if (selectedCategories != null)
+        {
+            foreach (var cat in selectedCategories)
+            {
+                newBook.BookCategories.Add(new BookCategory
+                {
+                    CategoryID = int.Parse(cat)
+                });
+            }
+        }
+
         if (!ModelState.IsValid)
         {
+            LoadDropdowns();
+            PopulateAssignedCategoryData(_context, newBook);
             return Page();
         }
 
+        Book.BookCategories = newBook.BookCategories;
         _context.Book.Add(Book);
         await _context.SaveChangesAsync();
 
         return RedirectToPage("./Index");
+    }
+
+    private void LoadDropdowns()
+    {
+        var authorList = _context.Author.Select(x => new
+        {
+            x.ID,
+            FullName = x.LastName + " " + x.FirstName
+        });
+
+        ViewData["AuthorID"] = new SelectList(authorList, "ID", "FullName");
+        ViewData["PublisherID"] = new SelectList(_context.Publisher, "ID", "PublisherName");
     }
 }

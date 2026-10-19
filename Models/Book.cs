@@ -16,13 +16,14 @@ namespace Tulan_David_Lab2.Models
         [DataType(DataType.Date)]
         public DateTime PublishingDate { get; set; }
 
+        public int? AuthorID { get; set; }
+
+        public Author? Author { get; set; }
+
         public int? PublisherID { get; set; }
 
         public Publisher? Publisher { get; set; }   // navigation property
 
-        [Display(Name = "Author")]
-        public int? AuthorID { get; set; }          // cheie străină
-
-        public Author? Author { get; set; }         // navigation property
+        public ICollection<BookCategory>? BookCategories { get; set; }
     }
 }

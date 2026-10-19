@@ -16,6 +16,11 @@
   <ItemGroup>
     <Compile Remove="Migrations\20261012214256_Publisher.cs" />
     <Compile Remove="Migrations\20261012214256_Publisher.Designer.cs" />
+    <Compile Remove="Pages\Index.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\AuthorPages\" />
-    <Folder Include="Pages\Publishers\" />
   </ItemGroup>
 
 </Project>
