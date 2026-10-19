@@ -10,6 +10,17 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+
+<form method="get" class="mb-3">
+    <div class="form-inline">
+        <label asp-for="SelectedAuthorID" class="me-2"></label>
+        <select asp-for="SelectedAuthorID" asp-items="Model.AuthorList" class="form-control me-2" style="max-width: 250px; display: inline-block;">
+            <option value="">-- All authors --</option>
+        </select>
+        <input type="submit" value="Filter" class="btn btn-primary" />
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -17,7 +28,7 @@
                 @Html.DisplayNameFor(model => model.Book[0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Book[0].Author)
+                @Html.DisplayNameFor(model => model.Book[0].AuthorID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Book[0].Price)
@@ -39,7 +50,7 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Author)
+                    @item.Author?.FirstName @item.Author?.LastName
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)

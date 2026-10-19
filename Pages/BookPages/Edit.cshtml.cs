@@ -31,7 +31,7 @@ public class EditModel : PageModel
             return NotFound();
         }
         Book = book;
-        ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID","PublisherName");
+        LoadDropdowns();
         return Page();
     }
 
@@ -41,6 +41,7 @@ public class EditModel : PageModel
     {
         if (!ModelState.IsValid)
         {
+            LoadDropdowns();
             return Page();
         }
 
@@ -63,6 +64,15 @@ public class EditModel : PageModel
         }
 
         return RedirectToPage("./Index");
+    }
+
+    private void LoadDropdowns()
+    {
+        ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName", Book?.PublisherID);
+
+        ViewData["AuthorID"] = new SelectList(
+            _context.Author.Select(a => new { a.ID, FullName = a.FirstName + " " + a.LastName }),
+            "ID", "FullName", Book?.AuthorID);
     }
 
     private bool BookExists(int id)

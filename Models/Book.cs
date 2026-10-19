@@ -10,8 +10,6 @@ namespace Tulan_David_Lab2.Models
         [Display(Name = "Book Title")]
         public string Title { get; set; }
 
-        public string Author { get; set; }
-
         [Column(TypeName = "decimal(6, 2)")]
         public decimal Price { get; set; }
 
@@ -21,5 +19,10 @@ namespace Tulan_David_Lab2.Models
         public int? PublisherID { get; set; }
 
         public Publisher? Publisher { get; set; }   // navigation property
+
+        [Display(Name = "Author")]
+        public int? AuthorID { get; set; }          // cheie străină
+
+        public Author? Author { get; set; }         // navigation property
     }
 }
